@@ -53,7 +53,7 @@
           $q = $pdo->query($sql);
           $q->setFetchMode(PDO::FETCH_ASSOC);
 
-          header('Location: /app/admin.php');
+          header('Location: /admin.php');
         }
 
       }

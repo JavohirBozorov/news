@@ -58,7 +58,7 @@ try{
                                         <?php echo("<img class='main-img img-fluid' style='' alt='img' src=\"./images/{$row['image']}\"  >") ?> 
                                     </div>
                                 </div>
-                                <div class="col-md-6 col-12 ms-2 m-sm-0">
+                                <div class="col-md-6 col-12 m-md-0 ms-2">
                                     <div class="main__news__content my-2">
                                         <a href="post.php<?= '?id=' . $row['id']; ?>" class="row text-decoration-none text-dark">
                                             <div class="d-block">

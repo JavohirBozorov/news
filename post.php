@@ -50,7 +50,7 @@
                 $q3 = $pdo->query($sql3);
                 $q3->setFetchMode(PDO::FETCH_ASSOC);
                 $comment = '';
-                header('Location: /app/post.php?id=' . $id);
+                header('Location: /post.php?id=' . $id);
             }
 
         }
@@ -123,13 +123,11 @@
               <div class="row">
                 <?php while ($row2 = $q2->fetch()) {  ?>
                     <div class="col-12 my-2">
-                        <p class="comments bg-light rounded p-2">
-                            <?php
-                                echo $row2['owner'] . '<br>';
-                                echo $row2['comment'] . '<br>';
-                                echo $row2['date'] . '<br>';
-                            ?>
-                        </p>
+                        <div class="comments bg-light rounded p-2">
+                            <h5><?= $row2['owner'] . '<br>'; ?></h5>
+                            <p><?= $row2['comment'] . '<br>'; ?></p>
+                            <p><?= $row2['date'] . '<br>'; ?></p>
+                        </div>
                     </div>
                 <?php } ?>
               </div>

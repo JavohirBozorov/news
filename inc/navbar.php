@@ -17,10 +17,10 @@
           <li class="nav-item">
             <a class="nav-link" href="<?php if(empty($_SESSION["username"])) { echo './login.php'; } else { echo './logout.php'; } ?>">
               <?php if(empty($_SESSION["username"])) { echo 'Login'; } else { echo 'Logout'; } ?>
-              <?php // header('Location: inc/navbar.php'); ?>
+              <?php // header('Location: ./inc/logout.php'); ?>
             </a>
           </li>
-          <li class="nav-item" style="display: <?= (isset($_SESSION["username"]) == 'admin') ? 'block' : 'none' ?>">
+          <li class="nav-item" style="display: <?= (!empty($_SESSION["username"]) && $_SESSION["username"] == 'admin') ? 'block' : 'none' ?>">
             <a class="nav-link" href="<?= ($_SESSION["username"]) == 'admin' ? './admin.php' : '' ?>">
               Admin
             </a>

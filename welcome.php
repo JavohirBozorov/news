@@ -6,7 +6,7 @@
 
   <section class="text-center">
     <?php if($_POST["name"] == 'admin' && $_POST["password"] == 'pass') {
-        header('Location: /app/admin.php');
+        header('Location: /admin.php');
       } elseif($_POST["name"] !== 'admin' && $_POST["password"] !== 'pass') { ?>
         <h4>
           Welcome <?php echo $_POST["name"]; ?><br>

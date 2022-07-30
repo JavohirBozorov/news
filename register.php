@@ -49,7 +49,7 @@ try {
           $q = $pdo->query($sql);
           $q->setFetchMode(PDO::FETCH_ASSOC);
 
-          header('Location: /app/login.php');
+          header('Location: /login.php');
         }
 
     }

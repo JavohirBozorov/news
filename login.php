@@ -8,6 +8,7 @@
 
   session_start();
 
+  $msg = '';
   $name = $pass = '';
   $nameErr = $passErr = '';
 
@@ -27,20 +28,20 @@
       $pdo = new PDO(
         'mysql:host=localhost;dbname=my_db','root', 'root'
       );
-
+      
       $sql = "SELECT id, name, pass, email
         FROM users
         WHERE name = \"$name\" AND pass = \"$pass\"";
     
       $q2 = $pdo->query($sql);
       $_SESSION['username'] = $q2->fetchAll()[0]['name'];
-      // if(!empty($_SESSION['username'])) { $_SESSION['username'] = $q2->fetchAll()[0]['name']; }
       if($name == 'admin') {
         header('Location: ./admin.php');
-      } elseif(!empty($name)) {
-        header('Location: ./index.php');
+      } elseif(!empty($_SESSION['username'])) {
+        $msg = $_SESSION['username'] . ' are successfully login' ;
+      } else {
+        $msg = 'Try again. You cannot login!';
       }
-      echo $_SESSION['username'];
     } catch(PDOException $e) {
       die("Could not connect to the database $dbname :" . $e->getMessage());
     }
@@ -51,7 +52,8 @@
 <main>
   <div class="container d-flex flex-column align-items-center">
     <h2>Login</h2>
-    <form action="" class="w-50" method="post">
+    <p><?= $msg; ?>
+    <form action="" class="w-100" method="post">
         <label for="name" class="form-label">Name: </label>
         <input class="form-control <?= !$nameErr ?: 'is-invalid'; ?>" type="text" name="name">
         <div class="invalid-title">

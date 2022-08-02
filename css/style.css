@@ -1,0 +1,25 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.html {
+    overflow-x: hidden;
+}
+
+.main-content__date {
+    opacity: 0.7;
+}
+
+.main__news__title:hover {
+    color: blue;
+}
+/* 
+.main-img {
+    max-width: 450px;
+} */
+
+@media (max-width: 520.98px) {
+    
+}

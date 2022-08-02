@@ -6,63 +6,61 @@
  
 <?php
 
-  session_start();
+session_start();
 
+try {
+ 
+  $pdo = new PDO(
+    'mysql:host=localhost;dbname=my_db','root', 'root'
+  );
+  
   $name = $email = $pass = '';
   $nameErr = $emailErr = $passErr = '';
+  
 
-  if (isset($_POST['submit'])) {
-    if(empty($_POST['name'])) {
-      $nameErr = 'Name cannot be empty';
-    } else {
-      $name = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-    }
-    if(empty($_POST['email'])) {
-      $emailErr = 'Email cannot be empty';
-    } else {
-      $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-    }
-    if(empty($_POST['password'])) {
-      $passErr = 'Password cannot be empty';
-    } else {
-      $pass = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+
+  if($name && $email && $pass) {
+    if (isset($_POST['submit'])) {
+      $sql = "INSERT INTO users (name, email, pass) VALUES ('$name', '$email', '$pass')";
+      
+      $q = $pdo->query($sql);
+      $q->setFetchMode(PDO::FETCH_ASSOC);
+
+      header('Location: /login.php');
     }
   }
-  
-  $_SESSION['name'] = $name;
-  $_SESSION['password'] = $pass;
-
-?>
-
-<?php
-try {
-    $pdo = new PDO(
-      'mysql:host=localhost;dbname=my_db','root', 'root'
-    );
-
-    session_start();
-
-    if($name && $email && $pass) {
-        if (isset($_POST['submit'])) {
-          $sql = "INSERT INTO users (name, email, pass) VALUES ('$name', '$email', '$pass')";
-          
-          $q = $pdo->query($sql);
-          $q->setFetchMode(PDO::FETCH_ASSOC);
-
-          header('Location: /login.php');
-        }
-
-    }
 
 }  catch(PDOException $e) {
   die("Could not connect to the database $dbname :" . $e->getMessage());
 }
+
+if (isset($_POST['submit'])) {
+  if(empty($_POST['name'])) {
+    $nameErr = 'Name cannot be empty';
+  } else {
+    $name = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+  }
+  if(empty($_POST['email'])) {
+    $emailErr = 'Email cannot be empty';
+  } else {
+    $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+  }
+  if(empty($_POST['password'])) {
+    $passErr = 'Password cannot be empty';
+  } else {
+    $pass = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+  }
+}
+
+$_SESSION['name'] = $name;
+$_SESSION['password'] = $pass;
+
 ?>
 
 <main>
   <div class="container d-flex flex-column align-items-center">
     <h2>Create new acccount</h2>
-    <form action="" class="w-50" method="post">
+    <form action="" class="w-100" method="post">
       <label for="name" class="form-label">Name: </label>
       <input class="form-control <?php echo !$nameErr ?: 'is-invalid'; ?>" type="text" name="name">
       <div class="invalid-title">
@@ -80,5 +78,5 @@ try {
       </div>
       <input type="submit" name="submit" value="Submit" class="btn btn-primary w-100">
     </form>
-    
+  </div> 
 </main>

@@ -50,10 +50,10 @@
 ?>
 
 <main>
-  <div class="container d-flex flex-column align-items-center">
-    <h2>Login</h2>
+  <div class="container row d-flex flex-column align-items-center">
+    <h2 class="text-center">Login</h2>
     <p><?= $msg; ?>
-    <form action="" class="w-100" method="post">
+    <form action="" class="col-lg-8 col-md-10 col" method="post">
         <label for="name" class="form-label">Name: </label>
         <input class="form-control <?= !$nameErr ?: 'is-invalid'; ?>" type="text" name="name">
         <div class="invalid-title">

@@ -42,9 +42,6 @@
                 $comment = filter_input(INPUT_POST, 'comment', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
             }
 
-            if(isset($_POST['submit'])) {
-            }
-
             if(empty($commentErr)){
                 $sql3 = "INSERT INTO comments (comment, owner, post_id) VALUES ('$comment', '$owner', '$id')";
                 $q3 = $pdo->query($sql3);
@@ -52,7 +49,6 @@
                 $comment = '';
                 header('Location: /post.php?id=' . $id);
             }
-
         }
     } catch(PDOException $e) {
         die("Could not connect to the database $dbname :" . $e->getMessage());
@@ -123,7 +119,7 @@
               <div class="row">
                 <?php while ($row2 = $q2->fetch()) {  ?>
                     <div class="col-12 my-2">
-                        <div class="comments bg-light rounded p-2">
+                        <div class="comments bg-light p-2" style="border-radius: 1rem;">
                             <h5><?= $row2['owner'] . '<br>'; ?></h5>
                             <p><?= $row2['comment'] . '<br>'; ?></p>
                             <p><?= $row2['date'] . '<br>'; ?></p>

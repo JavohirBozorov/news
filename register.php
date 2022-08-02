@@ -6,54 +6,38 @@
  
 <?php
 
+require_once(__DIR__ . '/classes/EmptyElement.php');
+require_once(__DIR__ . '/classes/RegisterPDO.php');
+
 session_start();
 
+$filter = new EmptyElement();
+
+if (isset($_POST['submit'])) {
+  $arr = $filter->filterInput($_POST);
+  $name = $arr['fields']['name'] ?? '';
+  $email = $arr['fields']['email'] ?? '';
+  $pass = $arr['fields']['password'] ?? '';
+  $nameErr = $arr['errors']['name'] ?? '';
+  $emailErr = $arr['errors']['email'] ?? '';
+  $passErr = $arr['errors']['password'] ?? '';
+}
+
 try {
- 
-  $pdo = new PDO(
-    'mysql:host=localhost;dbname=my_db','root', 'root'
-  );
+
+  $register = new registerPDO();
   
-  $name = $email = $pass = '';
-  $nameErr = $emailErr = $passErr = '';
-  
-
-
-  if($name && $email && $pass) {
-    if (isset($_POST['submit'])) {
-      $sql = "INSERT INTO users (name, email, pass) VALUES ('$name', '$email', '$pass')";
-      
-      $q = $pdo->query($sql);
-      $q->setFetchMode(PDO::FETCH_ASSOC);
-
-      header('Location: /login.php');
-    }
+  if (isset($_POST['submit'])) {
+    $register->registerFunction($name, $email, $pass);
   }
 
 }  catch(PDOException $e) {
   die("Could not connect to the database $dbname :" . $e->getMessage());
 }
 
-if (isset($_POST['submit'])) {
-  if(empty($_POST['name'])) {
-    $nameErr = 'Name cannot be empty';
-  } else {
-    $name = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-  }
-  if(empty($_POST['email'])) {
-    $emailErr = 'Email cannot be empty';
-  } else {
-    $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-  }
-  if(empty($_POST['password'])) {
-    $passErr = 'Password cannot be empty';
-  } else {
-    $pass = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-  }
+if(isset($_SESSION['name'])) {
+  $_SESSION['name'] = $name;
 }
-
-$_SESSION['name'] = $name;
-$_SESSION['password'] = $pass;
 
 ?>
 
@@ -64,17 +48,17 @@ $_SESSION['password'] = $pass;
       <label for="name" class="form-label">Name: </label>
       <input class="form-control <?php echo !$nameErr ?: 'is-invalid'; ?>" type="text" name="name">
       <div class="invalid-title">
-        <p class="text-danger"><?= $nameErr; ?></p>
+        <p class="text-danger"><?= isset($nameErr) ? $nameErr : ''; ?></p>
       </div>
       <label for="email" class="form-label">E-mail: </label>
       <input class="form-control <?php echo !$emailErr ?: 'is-invalid'; ?>" type="email" name="email">
       <div class="invalid-title">
-        <p class="text-danger"><?= $emailErr; ?></p>
+        <p class="text-danger"><?= isset($emailErr) ? $emailErr : ''; ?></p>
       </div>
       <label for="name" class="form-label">Password: </label>
       <input class="form-control <?php echo !$passErr ?: 'is-invalid'; ?>" type="password" name="password">
       <div class="invalid-title">
-        <p class="text-danger"><?= $passErr; ?></p>
+        <p class="text-danger"><?= isset($passErr) ? $passErr : ''; ?></p>
       </div>
       <input type="submit" name="submit" value="Submit" class="btn btn-primary w-100">
     </form>

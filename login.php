@@ -3,7 +3,7 @@
 
 <?php include('./inc/header.php') ?>
 <?php include('./inc/navbar.php') ?>
- 
+
 <?php
 
   session_start();
@@ -24,15 +24,19 @@
       $pass = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
     }
 
+    $hashedPwd = password_hash($pass, PASSWORD_BCRYPT);
+
     try {
       $pdo = new PDO(
         'mysql:host=localhost;dbname=my_db','root', 'root'
       );
-      
+
+      $checkPwd = password_verify($pass, $hashedPwd);
+
       $sql = "SELECT id, name, pass, email
         FROM users
-        WHERE name = \"$name\" AND pass = \"$pass\"";
-    
+        WHERE name = \"$name\" AND $checkPwd = true";
+
       $q2 = $pdo->query($sql);
       $_SESSION['username'] = $q2->fetchAll()[0]['name'];
       if($name == 'admin') {
@@ -51,8 +55,10 @@
 
 <main>
   <div class="container row d-flex flex-column align-items-center">
-    <h2 class="text-center">Login</h2>
-    <p><?= $msg; ?>
+    <div class="text-center">
+      <h2>Login</h2>
+      <p><?= $msg; ?>
+    </div>
     <form action="" class="col-lg-8 col-md-10 col" method="post">
         <label for="name" class="form-label">Name: </label>
         <input class="form-control <?= !$nameErr ?: 'is-invalid'; ?>" type="text" name="name">
